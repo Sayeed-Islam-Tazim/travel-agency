@@ -17,7 +17,7 @@ import { Calendar } from "react-date-range";
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
 import { DateRangePicker } from "react-date-range";
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 import { addDays } from "date-fns";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
@@ -33,14 +33,17 @@ import { format } from "date-fns";
 import { HiOutlineSearch, HiOutlineSwitchHorizontal } from "react-icons/hi";
 
 const FlightForm = () => {
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = (e: {
+    preventDefault: () => void;
+    target: unknown;
+  }) => {
     e.preventDefault();
     console.log("e.target", e.target);
   };
 
   const [date, setDate] = useState(new Date());
 
-  const onDateChange = (e) => {
+  const onDateChange = (e: SetStateAction<Date>) => {
     setDate(e);
     setOpenDate((prev) => !prev);
   };
@@ -53,7 +56,13 @@ const FlightForm = () => {
     },
   ]);
 
-  const onDateRangeChange = (e) => {
+  const onDateRangeChange = (
+    e:
+      | unknown[]
+      | ((
+          prevState: { startDate: Date; endDate: Date; key: string }[]
+        ) => { startDate: Date; endDate: Date; key: string }[])
+  ) => {
     console.log("onDateRangeChange", e);
     // let startDate = format(e[0].startDate, "dd-MM-yyyy");
     // let endDate = format(e[0].endDate, "dd-MM-yyyy");
@@ -75,22 +84,22 @@ const FlightForm = () => {
   };
 
   const [selectedTrip, setSelectedTrip] = useState("Round Trip");
-  const handleSelectedTrips = (e) => {
+  const handleSelectedTrips = (e: SetStateAction<string>) => {
     setSelectedTrip(e);
   };
 
   const [selectedFare, setSelectedFare] = useState("Regular Fare");
-  const handleSelectedFare = (e) => {
+  const handleSelectedFare = (e: SetStateAction<string>) => {
     setSelectedFare(e);
   };
 
   const [selectedFromCity, setSelectedFromCity] = useState("DAC");
-  const handleFromCitySelected = (e) => {
+  const handleFromCitySelected = (e: SetStateAction<string>) => {
     setSelectedFromCity(e);
   };
 
   const [selectedToCity, setSelectedToCity] = useState("");
-  const handleToCitySelected = (e) => {
+  const handleToCitySelected = (e: SetStateAction<string>) => {
     setSelectedToCity(e);
   };
 
