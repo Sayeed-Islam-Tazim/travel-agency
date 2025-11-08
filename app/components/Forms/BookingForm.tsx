@@ -11,16 +11,12 @@ import {
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { tabItems } from "../../utils/Navitems";
+import FlightForm from "./FlightForm";
 
 const BookingForm = () => {
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-    console.log("e", e.target.name.value);
-  };
-
   return (
     <div className="relative">
-      <Tabs defaultValue="account">
+      <Tabs defaultValue="Flight">
         <TabsList className="flex  items-center bg-cyan-400 gap-2">
           {tabItems.map((tab) => {
             return (
@@ -36,39 +32,7 @@ const BookingForm = () => {
           })}
         </TabsList>
         <TabsContent value="Flight">
-          <Card>
-            <CardHeader>
-              <CardTitle>Flight</CardTitle>
-              <CardDescription>
-                Make changes to your account here. Click save when you&apos;re
-                done.
-              </CardDescription>
-            </CardHeader>
-            <form
-              className="bg-white top-75 rounded-xl"
-              onSubmit={handleFormSubmit}
-            >
-              <CardContent className="grid gap-6">
-                <div className="flex">
-                  <div>
-                    <Label>Username</Label>
-                    <input type="text" id="name" />
-                  </div>
-                  <div>
-                    <Label>Username</Label>
-                    <input type="text" id="iname" />
-                  </div>
-                  <div>
-                    <Label>Username</Label>
-                    <input type="text" id="vname" />
-                  </div>
-                </div>
-              </CardContent>
-              <CardFooter>
-                <Button type="submit">Save changes</Button>
-              </CardFooter>
-            </form>
-          </Card>
+          <FlightForm />
         </TabsContent>
         <TabsContent value="Hotel">
           <Card>

@@ -195,4 +195,94 @@ export const tabItems: {
   },
 ];
 
+export const tripOption: {
+  id: string;
+  name: string;
+}[] = [
+  {
+    id: "1",
+    name: "One Way",
+  },
+  {
+    id: "2",
+    name: "Round Trip",
+  },
+  {
+    id: "3",
+    name: "Multi City",
+  },
+];
+
+export const fareOptions: {
+  id: string;
+  name: string;
+}[] = [
+  {
+    id: "1",
+    name: "Regular Fare",
+  },
+  {
+    id: "2",
+    name: "Student Fare",
+  },
+  {
+    id: "3",
+    name: "Umrah Fare",
+  },
+];
+
+export const classOptions: {
+  id: string;
+  name: string;
+}[] = [
+  {
+    id: "1",
+    name: "Premium Economy",
+  },
+  {
+    id: "2",
+    name: "Economy",
+  },
+  {
+    id: "3",
+    name: "Business",
+  },
+  {
+    id: "4",
+    name: "First Class",
+  },
+];
+
+export const cityOptions: {
+  id: string;
+  name: string;
+  shortForm: string;
+  airport: string;
+}[] = [
+  {
+    id: "1",
+    name: "Dhaka",
+    shortForm: "DAC",
+    airport: "Bangladesh, Hazrat Shahjalal International Airport",
+  },
+  {
+    id: "2",
+    name: "Cox's Bazar",
+    shortForm: "CXB",
+    airport: "Bangladesh, Cox's Bazar Airport",
+  },
+  {
+    id: "3",
+    name: "Chittagong",
+    shortForm: "CGP",
+    airport: "Bangladesh, Shah Amanat International Airport",
+  },
+  {
+    id: "4",
+    name: "New York",
+    shortForm: "JFK",
+    airport: "United States, John F. Kennedy International Airport",
+  },
+];
+
 // module.exports = { components, tabItems };
