@@ -12,11 +12,12 @@ import {
   tripOption,
   fareOptions,
   classOptions,
+  travellersDetails,
 } from "../../utils/Navitems";
-import { Calendar } from "react-date-range";
+// import { Calendar } from "react-date-range";
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
-import { DateRangePicker } from "react-date-range";
+import { DateRange, DateRangePicker } from "react-date-range";
 import { SetStateAction, useState } from "react";
 import { addDays } from "date-fns";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -31,6 +32,13 @@ import {
 } from "@/components/ui/select";
 import { format } from "date-fns";
 import { HiOutlineSearch, HiOutlineSwitchHorizontal } from "react-icons/hi";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { ChevronDown } from "lucide-react";
+import { Calendar } from "@/components/ui/calendar";
 
 const FlightForm = () => {
   const handleFormSubmit = (e: {
@@ -38,49 +46,7 @@ const FlightForm = () => {
     target: unknown;
   }) => {
     e.preventDefault();
-    console.log("e.target", e.target);
-  };
-
-  const [date, setDate] = useState(new Date());
-
-  const onDateChange = (e: SetStateAction<Date>) => {
-    setDate(e);
-    setOpenDate((prev) => !prev);
-  };
-
-  const [range, setRange] = useState([
-    {
-      startDate: new Date(),
-      endDate: addDays(new Date(), 7),
-      key: "selection",
-    },
-  ]);
-
-  const onDateRangeChange = (
-    e:
-      | unknown[]
-      | ((
-          prevState: { startDate: Date; endDate: Date; key: string }[]
-        ) => { startDate: Date; endDate: Date; key: string }[])
-  ) => {
-    console.log("onDateRangeChange", e);
-    // let startDate = format(e[0].startDate, "dd-MM-yyyy");
-    // let endDate = format(e[0].endDate, "dd-MM-yyyy");
-    // let dateObj = [
-    //   {
-    //     startDate,
-    //     endDate,
-    //     key: "Selection",
-    //   },
-    // ];
-    // console.log("dateObj", dateObj);
-    // console.log("startDate", e[0].startDate);
-    // console.log("endDate", e[0].endDate);
-    // setRange(dateObj);
-    // if (e[0].startDate === e[0].endDate) {
-    //   setOpenDateRange(false);
-    // }
-    setRange(e);
+    console.log("Form Value", e.target);
   };
 
   const [selectedTrip, setSelectedTrip] = useState("Round Trip");
@@ -103,21 +69,82 @@ const FlightForm = () => {
     setSelectedToCity(e);
   };
 
-  const [openDate, setOpenDate] = useState(false);
-  const [openDateRange, setOpenDateRange] = useState(false);
-
   const handleSwitch = () => {
     setSelectedFromCity(selectedToCity);
     setSelectedToCity(selectedFromCity);
   };
-  const handleOpenDate = () => {
-    // setOpenDate(!openDate);
-    setOpenDate((prev) => !prev);
-  };
-  const handleOpenDateRange = () => {
-    // setOpenDateRange(!openDateRange);
-    setOpenDateRange((prev) => !prev);
-  };
+
+  const [date, setDate] = useState(new Date());
+
+  const [dateRange, setDateRange] = useState<DateRange | undefined>({
+    from: new Date(),
+    to: addDays(new Date(), 7),
+  });
+
+  const [openTravellersPopOver, setOpenTravellersPopOver] = useState(false);
+  const [travellers, setTravellers] = useState({
+    adults: 1,
+    children: 0,
+    kids: 0,
+    infants: 0,
+  });
+
+  const totalTravellers =
+    travellers.adults +
+    travellers.children +
+    travellers.kids +
+    travellers.infants;
+
+  // const onDateChange = (e: SetStateAction<Date>) => {
+  //   setDate(e);
+  //   setOpenDate((prev) => !prev);
+  // };
+
+  // const [range, setRange] = useState([
+  //   {
+  //     startDate: new Date(),
+  //     endDate: addDays(new Date(), 7),
+  //     key: "selection",
+  //   },
+  // ]);
+
+  // const onDateRangeChange = (
+  //   e:
+  //     | unknown[]
+  //     | ((
+  //         prevState: { startDate: Date; endDate: Date; key: string }[]
+  //       ) => { startDate: Date; endDate: Date; key: string }[])
+  // ) => {
+  //   console.log("onDateRangeChange", e);
+  //   // let startDate = format(e[0].startDate, "dd-MM-yyyy");
+  //   // let endDate = format(e[0].endDate, "dd-MM-yyyy");
+  //   // let dateObj = [
+  //   //   {
+  //   //     startDate,
+  //   //     endDate,
+  //   //     key: "Selection",
+  //   //   },
+  //   // ];
+  //   // console.log("dateObj", dateObj);
+  //   // console.log("startDate", e[0].startDate);
+  //   // console.log("endDate", e[0].endDate);
+  //   // setRange(dateObj);
+  //   // if (e[0].startDate === e[0].endDate) {
+  //   //   setOpenDateRange(false);
+  //   // }
+  //   setRange(e);
+  // };
+
+  // const [openDate, setOpenDate] = useState(false);
+  // const [openDateRange, setOpenDateRange] = useState(false);
+  // const handleOpenDate = () => {
+  //   // setOpenDate(!openDate);
+  //   setOpenDate((prev) => !prev);
+  // };
+  // const handleOpenDateRange = () => {
+  //   // setOpenDateRange(!openDateRange);
+  //   setOpenDateRange((prev) => !prev);
+  // };
 
   return (
     <div>
@@ -145,33 +172,86 @@ const FlightForm = () => {
                   })}
                 </RadioGroup>
                 <div className="flex items-center gap-2">
+                  <Popover
+                    open={openTravellersPopOver}
+                    onOpenChange={setOpenTravellersPopOver}
+                  >
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="w-[180px] justify-between"
+                      >
+                        {totalTravellers} Travellers
+                        <ChevronDown className="ml-2 h-4 w-4" />
+                      </Button>
+                    </PopoverTrigger>
+
+                    <PopoverContent className="w-72 p-4">
+                      {travellersDetails.map((item) => (
+                        <div
+                          key={item.key}
+                          className="flex justify-between items-center py-2"
+                        >
+                          <div>
+                            <p className="font-medium">{item.label}</p>
+                            <p className="text-sm text-gray-500">
+                              {item.subtitle}
+                            </p>
+                          </div>
+
+                          <div className="flex items-center gap-3">
+                            <button
+                              className="h-8 w-8 flex items-center justify-center border rounded-full text-gray-500"
+                              onClick={() => {
+                                // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+                                item.key === "adults"
+                                  ? setTravellers((prev) => ({
+                                      ...prev,
+                                      [item.key]: Math.max(
+                                        1,
+                                        prev[item.key] - 1
+                                      ),
+                                    }))
+                                  : setTravellers((prev) => ({
+                                      ...prev,
+                                      [item.key]: Math.max(
+                                        0,
+                                        prev[item.key] - 1
+                                      ),
+                                    }));
+                              }}
+                            >
+                              −
+                            </button>
+                            <span>{travellers[item.key]}</span>
+                            <button
+                              className="h-8 w-8 flex items-center justify-center border rounded-full text-gray-500"
+                              onClick={() =>
+                                setTravellers((prev) => ({
+                                  ...prev,
+                                  [item.key]: prev[item.key] + 1,
+                                }))
+                              }
+                            >
+                              +
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+
+                      <Button
+                        onClick={() => setOpenTravellersPopOver(false)}
+                        className="w-full mt-3"
+                      >
+                        Done
+                      </Button>
+                    </PopoverContent>
+                  </Popover>
                   <Select
                     value="First Class"
                     // onValueChange={handleFromCitySelected}
                   >
-                    <SelectTrigger className="w-[180px]">
-                      <SelectValue placeholder="Select Class">
-                        {/* {selectedFromCity} */}
-                      </SelectValue>
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectLabel>Class</SelectLabel>
-                        {classOptions.map((c) => {
-                          return (
-                            <SelectItem key={c.id} value={c.name}>
-                              <p className="text-xs">{c.name}</p>
-                            </SelectItem>
-                          );
-                        })}
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                  <Select
-                    value="First Class"
-                    // onValueChange={handleFromCitySelected}
-                  >
-                    <SelectTrigger className="w-[180px]">
+                    <SelectTrigger className="w-[180px] bg-white">
                       <SelectValue placeholder="Select Class">
                         {/* {selectedFromCity} */}
                       </SelectValue>
@@ -261,39 +341,70 @@ const FlightForm = () => {
             <div className="col-span-2">
               {selectedTrip === "One Way" && (
                 <div>
-                  <p onClick={handleOpenDate}>
-                    {format(date, "dd MMMM, yyyy")}
-                  </p>
-                  {openDate && <Calendar date={date} onChange={onDateChange} />}
+                  <Popover>
+                    <PopoverTrigger>
+                      <p>{format(date, "dd MMMM, yyyy")}</p>
+                    </PopoverTrigger>
+                    <PopoverContent>
+                      <Calendar
+                        mode="single"
+                        selected={date}
+                        onSelect={setDate}
+                        autoFocus
+                        disabled={{ before: new Date() }}
+                        className="rounded-lg border shadow-sm"
+                      />
+                    </PopoverContent>
+                  </Popover>
+                  {/* {openDate && <Calendar date={date} onChange={onDateChange} />} */}
                 </div>
               )}
               {selectedTrip === "Round Trip" && (
                 <div>
-                  <div
-                    onClick={handleOpenDateRange}
-                    // onClick={() => setOpenDateRange(!openDateRange)}
-                    className="flex gap-1 mb-2"
-                  >
-                    <p>
-                      {format(range[0].startDate, "dd MMMM, yyyy")}
-                      {/* readOnly */}
-                    </p>
-                    <span>to</span>
-                    <p>{format(range[0].endDate, "dd MMMM, yyyy")}</p>
-                  </div>
-                  {openDateRange && (
-                    <DateRangePicker
-                      ranges={range}
-                      // onChange={(item) => setRange([item.selection])}
-                      onChange={(item) => onDateRangeChange([item.selection])}
-                      dateDisplayFormat="dd-MM-yyyy"
-                      moveRangeOnFirstSelection={false}
-                      // months={2}
-                      direction="horizontal"
-                      rangeColors={["#23A5B6"]}
-                      showDateDisplay={true}
-                    />
-                  )}
+                  <Popover>
+                    <PopoverTrigger>
+                      <p>
+                        {/* {format(dateRange?.from, "dd MMMM, yyyy")} to{" "}
+                          {format(dateRange?.to, "dd MMMM, yyyy")} */}
+                        {dateRange?.from && dateRange?.to
+                          ? `${dateRange.from.toDateString()} → ${dateRange.to.toDateString()}`
+                          : dateRange?.from
+                          ? `Start: ${dateRange.from.toDateString()}`
+                          : "Select date range"}
+                      </p>
+                    </PopoverTrigger>
+                    <PopoverContent>
+                      <Calendar
+                        mode="range"
+                        // defaultMonth={dateRange?.from}
+                        selected={dateRange}
+                        onSelect={setDateRange}
+                        // numberOfMonths={2}
+                        disabled={{ before: new Date() }}
+                        // fromDate={new Date()}
+                        className="rounded-lg border shadow-sm"
+                      />
+                    </PopoverContent>
+                  </Popover>
+                  {/* <div
+                  // onClick={handleOpenDateRange}
+                  // onClick={() => setOpenDateRange(!openDateRange)}
+                  // className="flex gap-1 mb-2"
+                  > </div> */}
+                  {/* {openDateRange && (
+                      <DateRangePicker
+                       ranges={range}
+                       // onChange={(item) => setRange([item.selection])}
+                       onChange={(item) => onDateRangeChange([item.selection])}
+                       dateDisplayFormat="dd-MM-yyyy"
+                       moveRangeOnFirstSelection={false}
+                       minDate={new Date()}
+                       // months={2}
+                       direction="horizontal"
+                       rangeColors={["#23A5B6"]}
+                       showDateDisplay={true}
+                     /> 
+                  )}*/}
                 </div>
               )}
               {selectedTrip === "Multi City" && (

@@ -253,6 +253,33 @@ export const classOptions: {
   },
 ];
 
+export const travellersDetails: {
+  key: string;
+  label: string;
+  subtitle: string;
+}[] = [
+  {
+    key: "adults",
+    label: "Adults",
+    subtitle: "12 years & above",
+  },
+  {
+    key: "children",
+    label: "Children",
+    subtitle: "5 to under 12",
+  },
+  {
+    key: "kids",
+    label: "Kids",
+    subtitle: "2 to under 5",
+  },
+  {
+    key: "infants",
+    label: "Infants",
+    subtitle: "Under 2 years",
+  },
+];
+
 export const cityOptions: {
   id: string;
   name: string;
@@ -282,6 +309,44 @@ export const cityOptions: {
     name: "New York",
     shortForm: "JFK",
     airport: "United States, John F. Kennedy International Airport",
+  },
+];
+
+export const offers: {
+  key: string;
+  src: string;
+  title: string;
+  desc: string;
+}[] = [
+  {
+    key: "1",
+    src: "/assets/offers/offer-1.jpg",
+    title: "Save upto 10% on Flight Booking",
+    desc: "Up to 15% discount on the base fare of domestic flights",
+  },
+  {
+    key: "2",
+    src: "/assets/offers/offer-2.jpg",
+    title: "Save upto 10% on Flight Booking",
+    desc: "Up to 15% discount on the base fare of domestic flights",
+  },
+  {
+    key: "3",
+    src: "/assets/offers/offer-3.jpg",
+    title: "Save upto 10% on Flight Booking",
+    desc: "Up to 15% discount on the base fare of domestic flights",
+  },
+  {
+    key: "4",
+    src: "/assets/offers/offer-4.jpg",
+    title: "Save upto 10% on Flight Booking",
+    desc: "Up to 15% discount on the base fare of domestic flights",
+  },
+  {
+    key: "5",
+    src: "/assets/offers/offer-5.jpg",
+    title: "Save upto 10% on Flight Booking",
+    desc: "Up to 15% discount on the base fare of domestic flights",
   },
 ];
 
